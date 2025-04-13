@@ -1,0 +1,38 @@
+name: Docker Image CI Deploy
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:Deploy')
+    runs-on: ubuntu-latest
+
+    services:
+      devnet:
+        image: ${{ secrets.DOCKERHUB_USERNAME }}/get-ethereum-assignment:latest
+        ports:
+          - 8545:8545
+        options: --health-cmd "curl http://localhost:8545" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        cd hardhat
+        npm ci
+
+    - name: Compile Contracts
+      run: |
+        cd hardhat
+        npx hardhat compile
