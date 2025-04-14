@@ -15,11 +15,6 @@ jobs:
         image: ethereum/client-go:stable
         ports:
           - 8545:8545
-        options: >-
-          --health-cmd "wget --spider -q http://localhost:8545 || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
         env:
           GETH_ARGS: "--dev --http --http.api eth,net,web3,personal --mine --miner.threads=1"
 
