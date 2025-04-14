@@ -49,7 +49,7 @@ jobs:
     - name: Install dependencies
       run: |
         cd hardhat
-        npx hardhat test --network localhost
+        npx hardhat test
 
     - name: Compile Contracts
       run: |
