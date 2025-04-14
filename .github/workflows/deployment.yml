@@ -12,7 +12,7 @@ jobs:
 
     services:
       devnet:
-        image: krishum77/get-ethereum-assignment:latest
+        image: krishum77/get-etherium-assignment
         ports:
           - 8545:8545
         options: --health-cmd "curl http://localhost:8545" --health-interval 10s --health-timeout 5s --health-retries 5
