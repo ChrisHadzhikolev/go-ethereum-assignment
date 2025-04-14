@@ -44,12 +44,13 @@ jobs:
           sleep 10
       
       - name: Deploy Hardhat project to devnet
+        working-directory: ./hardhat
         run: |
           echo "Deploying contracts to local devnet"
           
           # Configure Hardhat to use local devnet
           cat > hardhat.config.local.js << 'EOL'
-          const config = require('./hardhat/hardhat.config');
+          const config = require('./hardhat.config');
           config.networks.local = {
             url: "http://localhost:8545",
             accounts: {
@@ -60,7 +61,7 @@ jobs:
           EOL
           
           # Deploy contracts
-          npx hardhat run --config hardhat/hardhat.config.local.js hardhat/scripts/deploy.js --network local
+          npx hardhat run --config hardhat.config.local.js scripts/deploy.js --network local
           
           # Save deployment artifacts
           mkdir -p /tmp/deployments
