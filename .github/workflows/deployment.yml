@@ -10,14 +10,27 @@ jobs:
     if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:Deploy')
     runs-on: ubuntu-latest
 
-    services:
-      devnet:
-        image: krishum77/get-etherium-assignment
-        ports:
-          - 8545:8545
-        options: --health-cmd "curl http://localhost:8545" --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
+    - name: Start devnet container
+      run: |
+        docker pull --platform linux/amd64 krishum77/get-etherium-assignment
+        docker run -d --platform linux/amd64 \
+          --name devnet \
+          -p 8545:8545 \
+          krishum77/get-etherium-assignment
+
+    - name: Wait for devnet to be ready
+      run: |
+        for i in {1..20}; do
+          if curl -s http://localhost:8545 > /dev/null; then
+          echo "Devnet is up!"
+          break
+        fi
+        echo "Waiting for devnet..."
+        sleep 3
+        done
+
+
     - name: Checkout code
       uses: actions/checkout@v4
 
