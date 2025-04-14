@@ -46,6 +46,11 @@ jobs:
         cd hardhat
         npm ci
 
+    - name: Install dependencies
+      run: |
+        cd hardhat
+        npx hardhat test --network localhost
+
     - name: Compile Contracts
       run: |
         cd hardhat
