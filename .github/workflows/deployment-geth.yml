@@ -31,7 +31,8 @@ jobs:
             -p 8545:8545 \
             krishum77/get-etherium-assignment
           docker ps
-          curl -s http://localhost:8545
+          docker logs devnet
+          curl http://localhost:8545
 
       - name: Checkout code
         uses: actions/checkout@v3
