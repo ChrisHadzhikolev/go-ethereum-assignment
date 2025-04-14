@@ -1,0 +1,58 @@
+name: Deployment GETH
+
+on:
+  pull_request:
+    branches: [ "master" ]
+    types: [closed]
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+  deploy:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:Deploy')
+    runs-on: ubuntu-latest
+
+    services:
+      geth:
+        image: ethereum/client-go:stable
+        ports:
+          - 8545:8545
+        options: >-
+          --health-cmd "wget --spider -q http://localhost:8545 || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        env:
+          GETH_ARGS: "--dev --http --http.api eth,net,web3,personal --mine --miner.threads=1"
+
+    defaults:
+      run:
+        working-directory: hardhat
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install deps (hardhat)
+        run: npm ci
+
+      - name: Wait for Geth
+        run: |
+          echo "Waiting for Geth to start..."
+          until curl -s http://localhost:8545 >/dev/null; do sleep 1; done
+          echo "Geth is live"
+
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Run tests
+        run: npx hardhat test --network geth
+
+      - name: Deploy contract
+        run: npx hardhat run scripts/deploy.ts --network geth
