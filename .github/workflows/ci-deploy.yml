@@ -36,3 +36,14 @@ jobs:
       run: |
         cd hardhat
         npx hardhat compile
+
+    - name: Deploy contracts to devnet
+      run: |
+        cd hardhat
+        npx hardhat run scripts/deploy.js --network localhost
+
+    - name: Copy deployment artifacts
+      run: |
+        mkdir -p devnet-artifacts
+        cp -r hardhat/artifacts devnet-artifacts/
+        cp -r hardhat/cache devnet-artifacts/
