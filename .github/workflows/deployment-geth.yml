@@ -30,9 +30,6 @@ jobs:
             --name devnet \
             -p 8545:8545 \
             krishum77/get-etherium-assignment
-          docker ps
-          docker logs devnet
-          curl http://localhost:8545
 
       - name: Checkout code
         uses: actions/checkout@v3
@@ -50,9 +47,9 @@ jobs:
       - name: Wait for Geth
         run: |
           docker ps
-          echo "Waiting for Geth to start..."
-          until curl -s http://localhost:8545 >/dev/null; do sleep 1; done
-          echo "Geth is live"
+          # echo "Waiting for Geth to start..."
+          # until curl -s http://localhost:8545 >/dev/null; do sleep 1; done
+          # echo "Geth is live"
 
       - name: Compile contracts
         working-directory: hardhat
