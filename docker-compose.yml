@@ -1,11 +1,10 @@
-version: '3.8'
-
 services:
   app:
-    image: ${DOCKERHUB_USERNAME}/get-ethereum-assignment:latest
+    image: krishum77/get-etherium-assignment:latest
+    platform: linux/amd64
     container_name: app-devnet
     ports:
-      - "8080:8080"
+      - "8545:8545"
     environment:
       - NODE_ENV=development
       - LOG_LEVEL=debug
