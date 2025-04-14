@@ -47,7 +47,6 @@ jobs:
       - name: Wait for Geth
         run: |
           docker logs devnet
-          curl 127.0.0.1:8551
           echo "Waiting for Geth to start..."
           until curl -s http://localhost:30303 >/dev/null; do sleep 1; done
           echo "Geth is live"
