@@ -35,6 +35,7 @@ jobs:
       - name: Start local devnet
         run: |
           echo "Starting local Ethereum devnet with forked go-ethereum"
+          docker pull --platform linux/amd64 krishum77/get-etherium-assignment:latest
           docker run -d --platform linux/amd64 --name eth-devnet -p 8545:8545 \
             krishum77/get-ethereum-assignment:latest \
             --dev --http --http.addr "0.0.0.0" --http.api "eth,net,web3,personal" --mine
