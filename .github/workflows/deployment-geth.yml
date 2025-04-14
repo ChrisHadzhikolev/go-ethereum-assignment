@@ -18,9 +18,9 @@ jobs:
     #     env:
     #       GETH_ARGS: "--dev --http --http.api eth,net,web3,personal --mine --miner.threads=1"
 
-    defaults:
-      run:
-        working-directory: hardhat
+    # defaults:
+    #   run:
+    #     working-directory: hardhat
 
     steps:
       - name: Run GETH Client
@@ -38,8 +38,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache-dependency-path: hardhat/package-lock.json
 
       - name: Install deps (hardhat)
+        working-directory: hardhat
         run: npm ci
 
       - name: Wait for Geth
@@ -49,10 +51,13 @@ jobs:
           echo "Geth is live"
 
       - name: Compile contracts
+        working-directory: hardhat
         run: npx hardhat compile
 
       - name: Run tests
+        working-directory: hardhat
         run: npx hardhat test --network geth
 
       - name: Deploy contract
+        working-directory: hardhat
         run: npx hardhat run scripts/deploy.ts --network geth
