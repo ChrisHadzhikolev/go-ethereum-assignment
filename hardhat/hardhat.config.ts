@@ -5,7 +5,7 @@ const config: HardhatUserConfig = {
   solidity: "0.8.24",
   networks: {
     geth: {
-      url: "http://localhost:8551",
+      url: "http://localhost:8545",
       // `personal_unlockAccount`?
       // devkey?
       // accounts: ["0x..."]?
