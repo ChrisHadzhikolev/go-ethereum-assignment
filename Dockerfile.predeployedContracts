@@ -1,0 +1,5 @@
+FROM krishum77/get-etherium-assignment
+
+COPY ./geth-data /root/.ethereum
+EXPOSE 8545
+CMD ["geth", "--http", "--http.addr", "0.0.0.0", "--http.api", "eth,web3,net", "--allow-insecure-unlock"]
