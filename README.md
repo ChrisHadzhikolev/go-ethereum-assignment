@@ -1,4 +1,4 @@
-## Go Ethereum te
+## Go Ethereum t
 
 Golang execution layer implementation of the Ethereum protocol.
 
