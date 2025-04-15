@@ -5,8 +5,10 @@ async function main() {
   console.log("Deploying contracts with:", await deployer.getAddress());
 
 
-  const MyContract = await ethers.getContractFactory("MyContract");
-  const contract = await MyContract.deploy();
+  const Lock = await ethers.getContractFactory("Lock");
+  const unlockTime = Math.floor(Date.now() / 1000) + 60; 
+  const contract = await Lock.deploy(unlockTime, { value: ethers.parseEther("0.1") });
+
 
   console.log("Contract deployed to:", contract.target);
 }
