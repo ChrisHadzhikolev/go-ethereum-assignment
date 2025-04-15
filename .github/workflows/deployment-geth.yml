@@ -30,6 +30,7 @@ jobs:
             --name devnet \
             -p 8545:8545 \
             krishum77/get-etherium-assignment
+          docker ps
 
       - name: Checkout code
         uses: actions/checkout@v3
