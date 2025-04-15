@@ -62,4 +62,4 @@ jobs:
 
       - name: Deploy contract
         working-directory: hardhat
-        run: npx hardhat run scripts/deploy.ts --network geth
+        run: npx hardhat run scripts/deploy.ts
