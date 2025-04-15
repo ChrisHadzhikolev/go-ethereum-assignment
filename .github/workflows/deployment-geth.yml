@@ -27,7 +27,6 @@ jobs:
         run: |
           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
           docker run -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
-            --dev \
             --http \
             --http.addr 0.0.0.0 \
             --http.api eth,web3,net \
