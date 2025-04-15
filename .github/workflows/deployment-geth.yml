@@ -58,7 +58,7 @@ jobs:
 
       - name: Build a new Docker image with deployed contracts
         run: |
-          cp Dockerfile.withContracts Dockerfile
+          cp Dockerfile.predeployedContracts Dockerfile
           docker build -t krishum77/geth-with-contracts:latest .
 
       - name: Log in to Docker Hub
