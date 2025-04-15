@@ -26,7 +26,7 @@ jobs:
       - name: Run GETH Client
         run: |
           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
-          docker run -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
+          docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
             --http \
             --http.addr 0.0.0.0 \
             --http.api eth,web3,net \
