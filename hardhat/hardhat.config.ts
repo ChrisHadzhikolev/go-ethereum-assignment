@@ -2,7 +2,9 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.24",
+   solidity: {
+    version: "0.8.28",
+  },
   networks: {
     geth: {
       url: "http://localhost:8545",
