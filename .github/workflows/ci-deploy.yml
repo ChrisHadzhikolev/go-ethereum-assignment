@@ -1,4 +1,4 @@
-name: Deployment GETH
+name: CI Deploy
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run GETH Client
+      - name: Run Forked Repository Image
         run: |
           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
           docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
@@ -29,7 +29,7 @@ jobs:
           node-version: '18'
           cache-dependency-path: hardhat/package-lock.json
 
-      - name: Install deps (hardhat)
+      - name: Install hardhat dependencies
         working-directory: hardhat
         run: npm ci
 
@@ -51,7 +51,7 @@ jobs:
         working-directory: hardhat
         run: npx hardhat run scripts/deploy.ts
 
-      - name: Stop devnet and copy chain data
+      - name: Stop devnet container and copy chain data
         run: |
           docker stop devnet
           docker cp devnet:/root/.ethereum ./geth-data
