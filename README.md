@@ -21,7 +21,7 @@
            - Running the newly built image with appropriate flags (enabling http etc.) and exposing port 8545
         3. deploys the Sample Hardhat Project to it.
            - Setting up Node.js and installing hardhat dependencies (using lightweight npm ci instead of npm i)
-           - Waiting for the docker container to be ready
+           - Waiting for the docker container to be ready (added timeout of 180 seconds to make sure it doesn't get stuck in endless loop)
            - Compiling the default contract from the hardhat sample project
            - Deploying the default contract using deploy.ts script
            - Stopping the docker container and copying any generated data
