@@ -1,6 +1,6 @@
-## Assignment Documentation
+# Assignment Documentation
 
-# Comments are provided on the different steps.
+## Comments are provided on the different steps.
 
 1. Fork the following repo:
     1. go-ethereum (geth) https://github.com/ethereum/go-ethereum
