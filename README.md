@@ -1,4 +1,4 @@
-# Assignment Documentation A little test
+# Assignment Documentation
 
 ## Comments are provided on the different steps.
 
@@ -26,7 +26,7 @@
            - Deploying the default contract using deploy.ts script
            - Stopping the docker container and copying any generated data
         5. builds a new docker image, which allows to run an instance of the devnet with the contracts already deployed and uploads it to the same registry with a suitable different tag
-           - Building and Pushing a new docker image with Dockerfile located in the root directory passing the data from the previous step (krishum77/geth-with-contracts)
+           - Building and Pushing a new docker image with Dockerfile (Dockerfile.predeployedContracts) located in the root directory passing the data from the previous step (krishum77/geth-with-contracts)
 
 4. Add a step to the pipeline which runs the hardhat tests from the sample project against the image with predeployed contracts
    - Running the default tests from the hardhat sample project before deploying the contract step.
