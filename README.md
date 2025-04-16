@@ -1,3 +1,51 @@
+## Assignment Documentation
+
+# Comments are provided on the different steps.
+
+1. Fork the following repo:
+    1. go-ethereum (geth) https://github.com/ethereum/go-ethereum
+2. Update your forked repo with the following functionality:
+    1. When a PR with label `CI:Build` is merged in it, a trigger kicks in and:
+        1. builds a new docker image of the given project
+           - using the Dockerfile in the root directory
+           - Using secrets for chosen artifact repository credentials (Docker Hub)
+           - Making use of buildx, login, metadata and build-push docker actions
+        3. uploads it to a registry (krishum77/get-etherium-assignment)
+    2. Create a Docker Compose definition that runs a local devnet with the newly built image.
+       - Located in the root directory
+       - Running the geth image in dev mode
+       - --platform flag forcing linux/amd64 architecture
+3. Create e new directory named `hardhat` in the repository. Inside it start a new **Sample Hardhat Project** (*following official Hardhat docs*)
+    1. When a PR with label `CI:Deploy` is merged in the repo, a pipeline is triggered that
+        1. runs a local devnet using the forked `go-ethereum` image.
+           - Running the newly built image with appropriate flags (enabling http etc.) and exposing port 8545
+        3. deploys the Sample Hardhat Project to it.
+           - Setting up Node.js and installing hardhat dependencies (using lightweight npm ci instead of npm i)
+           - Waiting for the docker container to be ready
+           - Compiling the default contract from the hardhat sample project
+           - Deploying the default contract using deploy.ts script
+           - Stopping the docker container and copying any generated data
+        5. builds a new docker image, which allows to run an instance of the devnet with the contracts already deployed and uploads it to the same registry with a suitable different tag
+           - Building and Pushing a new docker image with Dockerfile located in the root directory passing the data from the previous step (krishum77/geth-with-contracts)
+
+4. Add a step to the pipeline which runs the hardhat tests from the sample project against the image with predeployed contracts
+   - Running the default tests from the hardhat sample project before deploying the contract step.
+6. Create a Terraform script that quickly creates a k8s cluster in the cloud and deploys an instance of the built image to it.
+   - Deploying to GKE
+   - versions.tf - kubernetes and google providers
+   - variables.tf - GCP Project ID, GCP region (defaulting to us-central1), Cluster Name, Docker Image (defaulting to the docker image with predeployed contracts)
+   - terraform.tfvars - used to pass the environment variables needed (currently pushed directly, normally wouldn be made with secrets for security reasons)
+   - gke-cluster.tf - getting cluster name and region from environment variables, removing default node pool and adding a new one with 1 node
+   - outputs.tf - endpoint for the deployed service
+   - main.tf - cluster host, token and certificate, creating new namespace _devnet_, creating deployment with 1 replica, creating LoadBalancer service(alternatively can be made with nginx-kubernetes LoadBalancer controller and ingress resource)
+   - Running the terraform scripts: terraform init, gcloud auth application-default login (authenticating with GCP service account, IAM Permissions - Compute Admin, Kubernetes Engine Admin, Service Account Admin), terraform apply -var-file="terraform.tfvars" (applying the configuration and passing the file with environment variables)
+8. (Bonus) Add Blockscout explorer to the Docker Compose definition created
+   - Adding blockscout and postgre-db to the docker-compose definition using the official Docker Hub images
+   - Coniguring blockscout to depend on the database and geth container
+   - Configuring blockscout environment variables: geth URL, database URL, chain ID (1337 default dev chain ID), secret key etc.
+   - Adding commands for correct running of the blockscout container
+
+
 ## Go Ethereum
 
 Golang execution layer implementation of the Ethereum protocol.
