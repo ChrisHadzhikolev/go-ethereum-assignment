@@ -8,11 +8,68 @@ services:
     environment:
       - NODE_ENV=development
       - LOG_LEVEL=debug
+    command:
+      - --dev
+      - --http
+      - --http.addr
+      - 0.0.0.0
+      - --http.api
+      - eth,web3,net
+      - --allow-insecure-unlock
     volumes:
       - ./data:/app/data
     restart: unless-stopped
     networks:
       - devnet
+
+  db-blockscout:
+    image: postgres:14
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: blockscout
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - devnet
+
+  blockscout:
+    depends_on:
+      - db-blockscout
+      - app
+    image: blockscout/blockscout:latest
+    restart: always
+    container_name: blockscout
+    links:
+      - db-blockscout:database
+    command:
+      - /bin/sh
+      - -c
+      - |
+        bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()"
+        bin/blockscout start
+    environment:
+      ETHEREUM_JSONRPC_VARIANT: 'geth'
+      ETHEREUM_JSONRPC_HTTP_URL: http://app:8545
+      ETHEREUM_JSONRPC_WS_URL: ws://app:8545
+      INDEXER_DISABLE_PENDING_TRANSACTIONS_FETCHER: 'true'
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/blockscout
+      ECTO_USE_SSL: 'false'
+      SECRET_KEY_BASE: '56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN'
+      CHAIN_ID: '1337'
+      HEART_BEAT_TIMEOUT: '30'
+      SUBNETWORK: 'Development'
+      NETWORK: 'Devnet'
+    ports:
+      - "4000:4000"
+    networks:
+      - devnet
+
+volumes:
+  postgres-data:
+
 networks:
   devnet:
     driver: bridge
