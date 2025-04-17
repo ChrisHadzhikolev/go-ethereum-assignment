@@ -20,7 +20,7 @@ jobs:
             -v ${{ github.workspace }}/hardhat/genesis.json:/genesis.json \
             -v ${{ github.workspace }}/geth-data:/geth \
             krishum77/get-etherium-assignment \
-            /bin/sh -c "geth init /genesis.json --datadir /geth"
+            geth init /genesis.json --datadir /geth
 
    
       - name: Run Forked Repository Image
