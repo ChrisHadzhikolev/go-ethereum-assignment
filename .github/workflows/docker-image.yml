@@ -21,7 +21,8 @@ jobs:
             -v ${{ github.workspace }}/geth-data:/geth \
             krishum77/get-etherium-assignment \
             init /genesis.json --datadir /geth
-            
+
+   
       - name: Run Forked Repository Image
         run: |
           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
