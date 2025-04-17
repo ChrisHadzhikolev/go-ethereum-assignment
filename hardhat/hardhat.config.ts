@@ -6,11 +6,12 @@ const config: HardhatUserConfig = {
     version: "0.8.28",
   },
   networks: {
-    geth: {
+    devnet: {
       url: "http://localhost:8545",
-      // `personal_unlockAccount`?
-      // devkey?
-      // accounts: ["0x..."]?
+      chainId: 1337,
+      accounts: {
+        mnemonic: "test test test test test test test test test test test junk"
+      }
     },
   },
 };
