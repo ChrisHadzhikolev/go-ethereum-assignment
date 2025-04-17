@@ -1,4 +1,4 @@
-# Assignment Documentation testte
+# Assignment Documentation testt
 
 ## Comments are provided on the different steps.
 
