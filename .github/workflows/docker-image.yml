@@ -58,3 +58,6 @@ jobs:
       - name: Compile contracts
         working-directory: hardhat
         run: npx hardhat compile
+
+      - name: Deploy Lock contract to devnet
+        run: npx hardhat run scripts/deploy.js --network devnet
