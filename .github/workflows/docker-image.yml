@@ -23,6 +23,20 @@ jobs:
             --allow-insecure-unlock \
             --http.corsdomain=* \
             --nodiscover
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache-dependency-path: hardhat/package-lock.json
+
+      - name: Install hardhat dependencies
+        working-directory: hardhat
+        run: npm ci
+        
       - name: Wait for Geth
         run: |
           echo "Waiting for Geth to start..."
@@ -40,3 +54,7 @@ jobs:
             fi
           done
           echo "Geth is live"
+          
+      - name: Compile contracts
+        working-directory: hardhat
+        run: npx hardhat compile
