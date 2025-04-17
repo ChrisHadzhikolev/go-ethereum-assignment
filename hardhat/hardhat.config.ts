@@ -9,9 +9,9 @@ const config: HardhatUserConfig = {
     devnet: {
       url: "http://localhost:8545",
       chainId: 1337,
-      accounts: {
-        mnemonic: "test test test test test test test test test test test junk"
-      }
+      accounts: [
+        "0x1000000000000000000000000000000000000000000000000000000000000001"
+      ]
     },
   },
 };
