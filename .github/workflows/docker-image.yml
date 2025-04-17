@@ -11,15 +11,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Initialize Geth with custom genesis
+        run: |
+          mkdir -p geth-data
+          docker pull --platform linux/amd64 krishum77/get-etherium-assignment
+          docker run --platform linux/amd64 --rm \
+            -v ${{ github.workspace }}/hardhat/genesis.json:/genesis.json \
+            -v ${{ github.workspace }}/geth-data:/geth \
+            krishum77/get-etherium-assignment \
+            init /genesis.json --datadir /geth
+            
       - name: Run Forked Repository Image
         run: |
           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
           docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
+            -v ${{ github.workspace }}/geth-data:/geth \
             --dev \
             --http \
             --http.addr 0.0.0.0 \
             --http.api web3,eth,debug,net \
             --http.vhosts=* \
+            --datadir /geth \
+            --networkid 1337 \
             --allow-insecure-unlock \
             --http.corsdomain=* \
             --nodiscover
