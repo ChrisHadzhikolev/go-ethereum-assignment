@@ -18,8 +18,8 @@ jobs:
             --dev \
             --http \
             --http.addr 0.0.0.0 \
-            --http.vhosts=*
             --http.api web3,eth,debug,net \
+            --http.vhosts=* \
             --allow-insecure-unlock \
             --http.corsdomain=* \
             --nodiscover
