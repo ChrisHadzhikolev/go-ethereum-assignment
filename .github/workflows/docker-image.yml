@@ -1,79 +1,64 @@
 name: CI Deploy
-
-on:
-  pull_request:
-    branches: [ "master" ]
-    types: [closed]
-
-jobs:
-  deploy:
-    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:Deploy')
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Initialize Geth with custom genesis
-        run: |
-          mkdir -p geth-data
-          docker pull --platform linux/amd64 krishum77/get-etherium-assignment
-          docker run --platform linux/amd64 --rm \
-            -v ${{ github.workspace }}/hardhat/genesis.json:/genesis.json \
-            -v ${{ github.workspace }}/geth-data:/geth \
-            krishum77/get-etherium-assignment \
-            init /genesis.json --datadir /geth
-
-   
-      - name: Run Forked Repository Image
-        run: |
-          docker pull --platform linux/amd64 krishum77/get-etherium-assignment
-          docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
-            -v ${{ github.workspace }}/geth-data:/geth \
-            --dev \
-            --http \
-            --http.addr 0.0.0.0 \
-            --http.api web3,eth,debug,net \
-            --http.vhosts=* \
-            --datadir /geth \
-            --networkid 1337 \
-            --allow-insecure-unlock \
-            --http.corsdomain=* \
-            --nodiscover
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache-dependency-path: hardhat/package-lock.json
-
-      - name: Install hardhat dependencies
-        working-directory: hardhat
-        run: npm ci
-        
-      - name: Wait for Geth
-        run: |
-          echo "Waiting for Geth to start..."
-          timeout=180
-          counter=0
-          until curl -s http://localhost:8545 >/dev/null; do
-            if [ $counter -ge $timeout ]; then
-              echo "Timed out waiting for Geth to start after ${timeout} seconds"
-              exit 1
-            fi
-            sleep 1
-            counter=$((counter + 1))
-            if [ $((counter % 10)) -eq 0 ]; then
-              echo "Still waiting... ($counter seconds elapsed)"
-            fi
-          done
-          echo "Geth is live"
-          
-      - name: Compile contracts
-        working-directory: hardhat
-        run: npx hardhat compile
-
-      - name: Deploy Lock contract to devnet
-        working-directory: hardhat
-        run: npx hardhat run scripts/deploy.ts --network devnet
+ 
+ on:
+   pull_request:
+     branches: [ "master" ]
+     types: [closed]
+ 
+ jobs:
+   deploy:
+     if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:Deploy')
+     runs-on: ubuntu-latest
+ 
+     steps:
+       - name: Run Forked Repository Image
+         run: |
+           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
+           docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
+             --dev \
+             --http \
+             --http.addr 0.0.0.0 \
+             --http.api web3,eth,debug,net \
+             --http.vhosts=* \
+             --allow-insecure-unlock \
+             --http.corsdomain=* \
+             --nodiscover
+ 
+       - name: Checkout code
+         uses: actions/checkout@v3
+ 
+       - name: Setup Node.js
+         uses: actions/setup-node@v3
+         with:
+           node-version: '18'
+           cache-dependency-path: hardhat/package-lock.json
+ 
+       - name: Install hardhat dependencies
+         working-directory: hardhat
+         run: npm ci
+ 
+       - name: Wait for Geth
+         run: |
+           echo "Waiting for Geth to start..."
+           timeout=180
+           counter=0
+           until curl -s http://localhost:8545 >/dev/null; do
+             if [ $counter -ge $timeout ]; then
+               echo "Timed out waiting for Geth to start after ${timeout} seconds"
+               exit 1
+             fi
+             sleep 1
+             counter=$((counter + 1))
+             if [ $((counter % 10)) -eq 0 ]; then
+               echo "Still waiting... ($counter seconds elapsed)"
+             fi
+           done
+           echo "Geth is live"
+           
+       - name: Compile contracts
+         working-directory: hardhat
+         run: npx hardhat compile
+ 
+       - name: Deploy Lock contract to devnet
+         working-directory: hardhat
+         run: npx hardhat run scripts/deploy.ts --network devnet
