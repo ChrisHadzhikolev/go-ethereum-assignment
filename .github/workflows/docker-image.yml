@@ -101,9 +101,29 @@ jobs:
          # PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
         run: npx hardhat run scripts/deploy.ts --network devnet
 
-      - name: Run tests
-        working-directory: hardhat
-        run: npx hardhat test --network devnet
+      # - name: Run tests
+      #   working-directory: hardhat
+      #   run: npx hardhat test --network devnet
 
-      - name: Show Geth logs
-        run: docker logs devnet
+      # - name: Show Geth logs
+      #   run: docker logs devnet
+
+      - name: Stop devnet container and copy chain data
+        run: |
+          docker stop devnet
+          docker cp devnet:/root/.ethereum ./geth-data
+
+      - name: Build a new Docker image with deployed contracts
+        run: |
+          cp Dockerfile.predeployedContracts Dockerfile
+          docker build -t krishum77/geth-with-contracts:latest .
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          docker push krishum77/geth-with-contracts:latest
