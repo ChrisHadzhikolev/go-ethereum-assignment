@@ -63,5 +63,5 @@ jobs:
 
       - name: Deploy Lock contract to devnet
         working-directory: hardhat
-        run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet
+        run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet --yes
         # npx hardhat run scripts/deploy.ts --network devnet
