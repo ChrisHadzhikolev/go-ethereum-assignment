@@ -164,4 +164,4 @@ jobs:
 
       - name: Run tests
         working-directory: hardhat
-        run: npx hardhat test --network predeployed
+        run: npx hardhat test --network devnet
