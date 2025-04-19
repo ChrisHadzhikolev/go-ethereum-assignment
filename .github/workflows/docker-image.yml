@@ -168,7 +168,9 @@ jobs:
         run: npx hardhat run scripts/deploy.ts --network devnet
 
       - name: Docker logs
-        run: docker exec predeployed ls -l /root/.ethereum/devchain
+        run: | 
+         docker exec predeployed ls -l /root/.ethereum/devchain
+         docker logs predeployed
 
       # - name: Run tests
       #   working-directory: hardhat
