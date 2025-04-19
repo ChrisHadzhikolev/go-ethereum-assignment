@@ -100,3 +100,6 @@ jobs:
         #  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: false
          # PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
         run: npx hardhat run scripts/deploy.ts --network devnet
+
+      - name: Show Geth logs
+        run: docker logs devnet
