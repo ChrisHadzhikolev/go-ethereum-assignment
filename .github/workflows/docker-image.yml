@@ -39,9 +39,6 @@ jobs:
         working-directory: hardhat
         run: npm ci
 
-      - name: Show Geth logs
-        run: docker logs devnet
-
       - name: Wait for Geth
         run: |
           echo "Waiting for Geth to start..."
@@ -60,14 +57,6 @@ jobs:
           done
           echo "Geth is live"
 
-      - name: Check account balance
-        run: |
-          echo "Querying balance..."
-          RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
-           --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x5409ed021d9299bf6814279a6a1411a7e866a631", "latest"],"id":1}' \
-           http://localhost:8545 | jq .)
-          echo "Balance response: $RESPONSE"
-
       - name: Show Geth logs
         run: docker logs devnet
 
@@ -82,10 +71,6 @@ jobs:
         #  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: false
          # PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
         run: npx hardhat run scripts/deploy.ts --network devnet
-
-      # - name: Run tests
-      #   working-directory: hardhat
-      #   run: npx hardhat test --network devnet
 
       - name: Show Geth logs
         run: docker logs devnet
@@ -153,16 +138,6 @@ jobs:
         run: | 
          docker exec predeployed ls -l /root/.ethereum/devchain
          docker logs predeployed
-         echo '...'
-         curl -X POST localhost:8545 \
-          -H "Content-Type: application/json" \
-          -d '{
-            "jsonrpc":"2.0",
-            "method":"eth_getCode",
-            "params":["0x836C7f29Ba1647aeef6efc425792Dd13e417b60F", "latest"],
-            "id":1
-          }'
-
 
       # - name: Run tests
       #   working-directory: hardhat 
