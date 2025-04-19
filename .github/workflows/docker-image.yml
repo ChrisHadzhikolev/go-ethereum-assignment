@@ -95,12 +95,6 @@ jobs:
         working-directory: hardhat
         run: npx hardhat compile
 
-      - name: Stop Geth Container and copy chain data
-        run: |
-          sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
-          ls -R ./chaindata
-          du -sh ./chaindata
-
       - name: Deploy Lock contract to devnet
         working-directory: hardhat
         # run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet
@@ -113,8 +107,8 @@ jobs:
       #   working-directory: hardhat
       #   run: npx hardhat test --network devnet
 
-      # - name: Show Geth logs
-      #   run: docker logs devnet
+      - name: Show Geth logs
+        run: docker logs devnet
 
       - name: Stop Geth Container and copy chain data
         run: |
