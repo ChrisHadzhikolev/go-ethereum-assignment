@@ -141,6 +141,23 @@ jobs:
            --http.corsdomain=* \
            --nodiscover
 
-      
+      - name: Wait for Geth redeployed
+        run: |
+          echo "Waiting for Geth to start..."
+          timeout=180
+          counter=0
+          until curl -s http://localhost:8545 >/dev/null; do
+            if [ $counter -ge $timeout ]; then
+              echo "Timed out waiting for Geth to start after ${timeout} seconds"
+              exit 1
+            fi
+            sleep 1
+            counter=$((counter + 1))
+            if [ $((counter % 10)) -eq 0 ]; then
+              echo "Still waiting... ($counter seconds elapsed)"
+            fi
+          done
+          echo "Geth is live"
+          
       - name: Docker logs
         run: docker logs predeployed
