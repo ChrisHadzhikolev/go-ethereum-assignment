@@ -15,37 +15,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         
-      - name: Create geth data directory
-        run: mkdir -p ./gethdata
+      # - name: Create geth data directory
+      #   run: mkdir -p ./gethdata
 
-      - name: Initialize Geth with custom genesis
-        run: |
-          docker run --rm --platform linux/amd64 \
-            -v ${{ github.workspace }}/gethdata:/root/.ethereum \
-            -v ${{ github.workspace }}/hardhat/genesis.json:/genesis.json \
-            krishum77/get-etherium-assignment init /genesis.json
-      - name: Start Geth node
-        run: |
-          docker run -d --platform linux/amd64 --name devnet \
-            -v ${{ github.workspace }}/gethdata:/root/.ethereum \
-            -p 8545:8545 \
-            krishum77/get-etherium-assignment \
-            --dev \
-            --http --http.addr 0.0.0.0 \
-            --http.api eth,web3,net,miner \
-            --http.corsdomain="*" \
-            --nodiscover --mine 
-      # - name: Run Forked Repository Image
+      # - name: Initialize Geth with custom genesis
       #   run: |
-      #     docker pull --platform linux/amd64 krishum77/get-etherium-assignment
-      #     docker run -d -p 8545:8545 --platform linux/amd64 --name localhost krishum77/get-etherium-assignment \
+      #     docker run --rm --platform linux/amd64 \
+      #       -v ${{ github.workspace }}/gethdata:/root/.ethereum \
+      #       -v ${{ github.workspace }}/hardhat/genesis.json:/genesis.json \
+      #       krishum77/get-etherium-assignment init /genesis.json
+      # - name: Start Geth node
+      #   run: |
+      #     docker run -d --platform linux/amd64 --name devnet \
+      #       -v ${{ github.workspace }}/gethdata:/root/.ethereum \
+      #       -p 8545:8545 \
+      #       krishum77/get-etherium-assignment \
       #       --dev \
-      #       --http \
-      #       --http.addr 0.0.0.0 \
-      #       --http.api web3,eth,debug,net,personal \
-      #       --http.vhosts=* \
-      #       --http.corsdomain=* \
-      #       --nodiscover
+      #       --http --http.addr 0.0.0.0 \
+      #       --http.api eth,web3,net,miner \
+      #       --http.corsdomain="*" \
+      #       --nodiscover --mine 
+      - name: Run Forked Repository Image
+        run: |
+          docker pull --platform linux/amd64 krishum77/get-etherium-assignment
+          docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
+            --dev \
+            --http \
+            --http.addr 0.0.0.0 \
+            --http.api web3,eth,debug,net \
+            --http.vhosts=* \
+            --http.corsdomain=* \
+            --nodiscover
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -98,5 +98,5 @@ jobs:
         run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet
         env:
          HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: false
-         PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
+         # PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
         # npx hardhat run scripts/deploy.ts --network devnet
