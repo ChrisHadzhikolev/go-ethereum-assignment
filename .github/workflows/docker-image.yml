@@ -129,5 +129,10 @@ jobs:
       - name: Push Docker image
         run: |
           docker push krishum77/geth-with-contracts:latest
-      # - name: Stop existing devnet
-      #   run: docker stop devnet || true
+
+      - name: Run the new image
+        run: |
+          docker run -d -p 8545:8545 --name predeployed
+      
+      - name: Docker logs
+        run: docker logs predeployed
