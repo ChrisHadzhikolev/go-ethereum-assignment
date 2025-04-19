@@ -160,7 +160,7 @@ jobs:
           echo "Geth is live"
           
       - name: Docker logs
-        run: docker exec predeployed ls -l /root/.ethereum/devchain/geth/chaindata
+        run: docker exec predeployed ls -l /root/.ethereum/devchain/geth
 
       # - name: Run tests
       #   working-directory: hardhat
