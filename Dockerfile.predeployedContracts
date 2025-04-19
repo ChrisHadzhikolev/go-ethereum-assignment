@@ -2,4 +2,4 @@ FROM krishum77/get-etherium-assignment
 
 COPY ./chaindata /root/.ethereum
 EXPOSE 8545
-CMD ["geth", "--dev", "--http", "--http.addr", "0.0.0.0", "--http.api", "eth,web3,net", "--allow-insecure-unlock"]
+ENTRYPOINT ["geth"]
