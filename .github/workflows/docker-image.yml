@@ -30,7 +30,7 @@ jobs:
             -v ${{ github.workspace }}/gethdata:/root/.ethereum \
             -p 8545:8545 \
             krishum77/get-etherium-assignment \
-            --dev
+            --dev \
             --http --http.addr 0.0.0.0 \
             --http.api eth,web3,net,miner \
             --http.corsdomain="*" \
