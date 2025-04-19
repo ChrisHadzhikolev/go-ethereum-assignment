@@ -161,3 +161,7 @@ jobs:
           
       - name: Docker logs
         run: docker logs predeployed
+
+      - name: Run tests
+        working-directory: hardhat
+        run: npx hardhat test --network predeployed
