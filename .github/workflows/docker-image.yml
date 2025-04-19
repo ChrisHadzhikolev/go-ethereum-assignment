@@ -158,7 +158,15 @@ jobs:
             fi
           done
           echo "Geth is live"
-          
+
+      - name: Deploy Lock contract to devnet
+        working-directory: hardhat
+        # run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet
+        # env:
+        #  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: false
+         # PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
+        run: npx hardhat run scripts/deploy.ts --network devnet
+
       - name: Docker logs
         run: docker exec predeployed ls -l /root/.ethereum/devchain
 
