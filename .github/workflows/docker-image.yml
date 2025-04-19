@@ -38,7 +38,8 @@ jobs:
       - name: Run Forked Repository Image
         run: |
           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
-          docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
+          docker run -d -p 8545:8545 -v ${{ github.workspace }}/chaindata:/root/.ethereum/devchain \ 
+          --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
             --dev \
             --http \
             --http.addr 0.0.0.0 \
@@ -110,8 +111,7 @@ jobs:
 
       - name: Copy deployments file
         run: |
-          mkdir -p /tmp/geth-data
-          cp hardhat/deployments.json /tmp/geth-data/
+          docker cp devnet:/root/.ethereum/devchain ./chaindata
           
       - name: Create new Docker image with deployed contracts
         run: |
