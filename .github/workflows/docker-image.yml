@@ -179,7 +179,7 @@ jobs:
           -d '{
             "jsonrpc":"2.0",
             "method":"eth_getCode",
-            "params":["0x03894c6426a12eda", "latest"],
+            "params":["0x4271a8771eBcDCF8B957D763a52B3e801E759cf5", "latest"],
             "id":1
           }'
 
