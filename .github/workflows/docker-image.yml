@@ -108,22 +108,26 @@ jobs:
       # - name: Show Geth logs
       #   run: docker logs devnet
 
-      - name: Stop devnet container and copy chain data
+      - name: Copy deployments file
         run: |
-          docker stop devnet
-          docker cp devnet:/root/.ethereum ./geth-data
-
-      - name: Build a new Docker image with deployed contracts
+          mkdir -p /tmp/geth-data
+          cp hardhat/deployments.json /tmp/geth-data/
+          
+      - name: Create new Docker image with deployed contracts
         run: |
-          cp Dockerfile.predeployedContracts Dockerfile
-          docker build -t krishum77/geth-with-contracts:latest .
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Push Docker image
-        run: |
-          docker push krishum77/geth-with-contracts:latest
+          # Create a Dockerfile for the new image
+          cat > Dockerfile.deployed << EOF
+          FROM krishum77/get-etherium-assignment
+          
+          # Copy the deployment info
+          COPY /tmp/geth-data/deployments.json /deployments.json
+          
+          # Set default command
+          CMD ["--dev", "--http", "--http.addr", "0.0.0.0", "--http.api", "web3,eth,debug,net", "--http.vhosts=*", "--http.corsdomain=*", "--nodiscover"]
+          EOF
+          
+          # Build the new image
+          docker build -f Dockerfile.deployed -t krishum77/get-etherium-assignment:with-contracts .
+          
+      - name: Stop existing devnet
+        run: docker stop devnet || true
