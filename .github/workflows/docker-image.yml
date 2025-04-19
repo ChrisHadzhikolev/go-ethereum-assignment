@@ -173,7 +173,17 @@ jobs:
         run: | 
          docker exec predeployed ls -l /root/.ethereum/devchain
          docker logs predeployed
+         echo '...'
+         curl -X POST localhost:8545 \
+          -H "Content-Type: application/json" \
+          -d '{
+            "jsonrpc":"2.0",
+            "method":"eth_getCode",
+            "params":["0x03894c6426a12eda", "latest"],
+            "id":1
+          }'
+
 
       # - name: Run tests
-      #   working-directory: hardhat
+      #   working-directory: hardhat 
       #   run: npx hardhat test --network devnet
