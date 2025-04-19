@@ -113,8 +113,7 @@ jobs:
       - name: Stop Geth Container and copy chain data
         run: |
           docker stop devnet
-          mkdir chaindata
-          docker cp devnet:/root/.ethereum/devchain ./chaindata
+          sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
           
       # - name: Create new Docker image with deployed contracts
       #   run: |
