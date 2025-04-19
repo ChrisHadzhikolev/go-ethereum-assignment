@@ -27,8 +27,10 @@ jobs:
 
       - name: Check account balance
         run: |
+          echo "Querying balance..."
           RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
-          --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x5409ed021d9299bf6814279a6a1411a7e866a631", "latest"],"id":1}' \ http://localhost:8545)
+            --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x5409ed021d9299bf6814279a6a1411a7e866a631", "latest"],"id":1}' \
+            http://localhost:8545)
           echo "Balance response: $RESPONSE"
 
       - name: Checkout code
