@@ -132,7 +132,15 @@ jobs:
 
       - name: Run the new image
         run: |
-          docker run -d -p 8545:8545 --name predeployed krishum77/geth-with-contracts:latest
+          docker run -d -p 8545:8545 --name predeployed krishum77/geth-with-contracts:latest \
+           --dev \
+           --http \
+           --http.addr 0.0.0.0 \
+           --http.api web3,eth,debug,net \
+           --http.vhosts=* \
+           --http.corsdomain=* \
+           --nodiscover
+
       
       - name: Docker logs
         run: docker logs predeployed
