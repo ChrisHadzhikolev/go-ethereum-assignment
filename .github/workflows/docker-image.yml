@@ -64,6 +64,9 @@ jobs:
             http://localhost:8545)
           echo "Balance response: $RESPONSE"
 
+      - name: Show Geth logs
+        run: docker logs localhost
+
        
       - name: Compile contracts
         working-directory: hardhat
