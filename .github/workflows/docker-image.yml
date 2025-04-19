@@ -110,10 +110,10 @@ jobs:
       - name: Show Geth logs
         run: docker logs devnet
 
-      # - name: Stop Geth Container and copy chain data
-      #   run: |
-      #     sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
-      #     docker stop devnet
+      - name: Stop Geth Container and copy chain data
+        run: |
+          docker stop devnet
+          #     sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
       #     ls -R ./chaindata
       #     du -sh ./chaindata
           
