@@ -56,7 +56,7 @@ jobs:
             fi
           done
           echo "Geth is live"
-          
+       
       - name: Compile contracts
         working-directory: hardhat
         run: npx hardhat compile
@@ -64,4 +64,6 @@ jobs:
       - name: Deploy Lock contract to devnet
         working-directory: hardhat
         run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network localhost
+        env:
+         HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: false
         # npx hardhat run scripts/deploy.ts --network devnet
