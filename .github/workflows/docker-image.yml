@@ -118,7 +118,6 @@ jobs:
       - name: Create new Docker image with deployed contracts
         run: |
           cp Dockerfile.predeployedContracts Dockerfile
-          docker build -f Dockerfile.deployed -t krishum77/get-etherium-assignment:with-contracts .
-          
+          docker build -t krishum77/geth-with-contracts:latest .          
       # - name: Stop existing devnet
       #   run: docker stop devnet || true
