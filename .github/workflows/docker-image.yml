@@ -102,6 +102,7 @@ jobs:
         run: npx hardhat run scripts/deploy.ts --network devnet
 
       - name: Run tests
+        working-directory: hardhat
         run: npx hardhat test --network devnet
 
       - name: Show Geth logs
