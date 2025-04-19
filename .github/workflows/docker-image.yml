@@ -115,21 +115,10 @@ jobs:
           docker stop devnet
           sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
           
-      # - name: Create new Docker image with deployed contracts
-      #   run: |
-      #     # Create a Dockerfile for the new image
-      #     cat > Dockerfile.deployed << EOF
-      #     FROM krishum77/get-etherium-assignment
-          
-      #     # Copy the deployment info
-      #     COPY /tmp/geth-data/deployments.json /deployments.json
-          
-      #     # Set default command
-      #     CMD ["--dev", "--http", "--http.addr", "0.0.0.0", "--http.api", "web3,eth,debug,net", "--http.vhosts=*", "--http.corsdomain=*", "--nodiscover"]
-      #     EOF
-          
-      #     # Build the new image
-      #     docker build -f Dockerfile.deployed -t krishum77/get-etherium-assignment:with-contracts .
+      - name: Create new Docker image with deployed contracts
+        run: |
+          cp Dockerfile.predeployedContracts Dockerfile
+          docker build -f Dockerfile.deployed -t krishum77/get-etherium-assignment:with-contracts .
           
       # - name: Stop existing devnet
       #   run: docker stop devnet || true
