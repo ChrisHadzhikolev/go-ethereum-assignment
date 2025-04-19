@@ -14,7 +14,7 @@ jobs:
       - name: Run Forked Repository Image
         run: |
           docker pull --platform linux/amd64 krishum77/get-etherium-assignment
-          docker run -d -p 8545:8545 --platform linux/amd64 --name devnet krishum77/get-etherium-assignment \
+          docker run -d -p 8545:8545 --platform linux/amd64 --name localhost krishum77/get-etherium-assignment \
             --dev \
             --http \
             --http.addr 0.0.0.0 \
@@ -63,5 +63,5 @@ jobs:
 
       - name: Deploy Lock contract to devnet
         working-directory: hardhat
-        run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet --yes
+        run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network localhost
         # npx hardhat run scripts/deploy.ts --network devnet
