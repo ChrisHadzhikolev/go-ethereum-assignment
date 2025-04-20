@@ -140,7 +140,7 @@ jobs:
 
       - name: Docker logs
         run: | 
-         docker exec predeployed ls -l /root/.ethereum/devchain
+         docker exec predeployed ls -l /root/.ethereum
          docker logs predeployed
 
       # - name: Run tests
