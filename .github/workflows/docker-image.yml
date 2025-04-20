@@ -79,7 +79,7 @@ jobs:
       - name: Stop Geth Container and copy chain data
         run: |
           echo '---'
-          docker exec -it devnet ls -al /root/.ethereum/devchain/chaindata
+          docker exec devnet ls -al /root/.ethereum/devchain/chaindata
           echo '---'
           docker stop devnet
           sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
