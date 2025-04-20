@@ -150,7 +150,7 @@ jobs:
 
       - name: Docker logs
         run: | 
-         docker exec predeployed ls -l /root/.ethereum/geth/chaindata
+         docker exec predeployed ls -a /root/.ethereum/devchain/geth/chaindata
          docker logs predeployed
 
       # - name: Run tests
