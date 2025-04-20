@@ -75,12 +75,10 @@ jobs:
       - name: Show Geth logs
         run: | 
          docker logs devnet
-         docker exec devnet ls -a /root/.ethereum
+         docker exec devnet ls -a /root/.ethereum/devchain
          echo '2'
          docker exec devnet ls -l /root/.ethereum/devchain
          echo '3'
-         docker exec devnet ls -l /root/.ethereum/drwxr-xr-x
-         echo '4'
          docker exec devnet ls -l /root/.ethereum/root
 
       - name: Stop Geth Container and copy chain data
