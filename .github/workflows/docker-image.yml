@@ -75,7 +75,7 @@ jobs:
       - name: Show Geth logs
         run: | 
          docker logs devnet
-         docker exec devnet ls -l /root/.ethereum
+         docker exec devnet ls -a /root/.ethereum
          echo '2'
          docker exec devnet ls -l /root/.ethereum/devchain
          echo '3'
