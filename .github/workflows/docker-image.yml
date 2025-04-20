@@ -92,20 +92,20 @@ jobs:
           sudo chmod -R a+rX gethdata
           docker stop devnet
           
-      - name: Create new Docker image with deployed contracts
-        run: |
-          cp Dockerfile.predeployedContracts Dockerfile
-          docker build -t krishum77/geth-with-contracts:latest .
+      # - name: Create new Docker image with deployed contracts
+      #   run: |
+      #     cp Dockerfile.predeployedContracts Dockerfile
+      #     docker build -t krishum77/geth-with-contracts:latest .
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: |
-          docker push krishum77/geth-with-contracts:latest
+      # - name: Push Docker image
+      #   run: |
+      #     docker push krishum77/geth-with-contracts:latest
 
       - name: Run the new image
         run: |
@@ -153,10 +153,10 @@ jobs:
         run: | 
          docker exec predeployed ls -a /root/.ethereum/devchain/geth/
          docker logs predeployed
-         # ADDRESS="0x2142C33367d0Fd2A266Ea2182076Ba0f75F6028C"  
-         # CODE=$(curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_getCode","params":["'"$ADDRESS"'", "latest"],"id":1}' \
-         #  -H "Content-Type: application/json" http://localhost:8545 | jq -r .result)
-         # echo "Contract code: $CODE"
+         ADDRESS="0x68e2A7f1102aa4EfC905aB02e630f30c2B6013eC"  
+         CODE=$(curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_getCode","params":["'"$ADDRESS"'", "latest"],"id":1}' \
+          -H "Content-Type: application/json" http://localhost:8545 | jq -r .result)
+         echo "Contract code: $CODE"
          
 
       # - name: Run tests
