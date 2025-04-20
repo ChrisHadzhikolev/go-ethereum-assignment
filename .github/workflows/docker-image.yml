@@ -73,7 +73,11 @@ jobs:
         run: npx hardhat run scripts/deploy.ts --network devnet
 
       - name: Show Geth logs
-        run: docker logs devnet
+        run: | 
+         docker logs devnet
+         docker exec devnet ls -l /root/.ethereum
+         echo '2'
+         docker exec devnet ls -l /root/.ethereum/devchain
 
       - name: Stop Geth Container and copy chain data
         run: |
