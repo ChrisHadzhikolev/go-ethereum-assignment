@@ -84,11 +84,11 @@ jobs:
           docker exec devnet ls -a /root/.ethereum/devchain/
           echo '---'
           
-          sudo docker cp devnet:/root/.ethereum/devchain/geth ./chaindata
-          sudo ls -R ./chaindata
-          sudo du -sh ./chaindata
-          mkdir -p gethdata/geth
-          sudo cp -r ./chaindata/* gethdata/geth/
+          sudo docker cp devnet:/root/.ethereum/devchain ./devchain
+          sudo ls -R ./devchain
+          sudo du -sh ./devchain
+          mkdir -p gethdata
+          sudo cp -r ./devchain/* gethdata/
           sudo chmod -R a+rX gethdata
           docker stop devnet
           
