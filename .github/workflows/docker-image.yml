@@ -87,6 +87,8 @@ jobs:
           sudo docker cp devnet:/root/.ethereum/devchain/geth/chaindata ./chaindata
           sudo ls -R ./chaindata
           sudo du -sh ./chaindata
+          mkdir -p gethdata/geth/chaindata
+          cp -r ./chaindata/* gethdata/geth/chaindata/
           docker stop devnet
           
       - name: Create new Docker image with deployed contracts
