@@ -21,7 +21,7 @@ jobs:
           docker run -d -p 8545:8545 \
            -v ${{ github.workspace }}/chaindata:/root/.ethereum/devchain \
            --name devnet krishum77/get-etherium-assignment:latest \
-           --datadir /root/.ethereum/devchain
+           --datadir /root/.ethereum/devchain \
            --dev \
            --http \
            --http.addr 0.0.0.0 \
