@@ -17,10 +17,10 @@ jobs:
         
       - name: Run Forked Repository Image
         run: |
-          docker pull krishum77/get-etherium-assignment
+          docker pull krishum77/get-etherium-assignment:latest
           docker run -d -p 8545:8545 \
            -v ${{ github.workspace }}/chaindata:/root/.ethereum/devchain \
-           --name devnet krishum77/get-etherium-assignment \
+           --name devnet krishum77/get-etherium-assignment:latest \
            --dev \
            --http \
            --http.addr 0.0.0.0 \
@@ -78,24 +78,24 @@ jobs:
       - name: Stop Geth Container and copy chain data
         run: |
           docker stop devnet
-          #     sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
-      #     ls -R ./chaindata
-      #     du -sh ./chaindata
+          sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
+          ls -R ./chaindata
+          du -sh ./chaindata
           
-      # - name: Create new Docker image with deployed contracts
-      #   run: |
-      #     cp Dockerfile.predeployedContracts Dockerfile
-      #     docker build -t krishum77/geth-with-contracts:latest .
+      - name: Create new Docker image with deployed contracts
+        run: |
+          cp Dockerfile.predeployedContracts Dockerfile
+          docker build -t krishum77/geth-with-contracts:latest .
 
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Push Docker image
-      #   run: |
-      #     docker push krishum77/geth-with-contracts:latest
+      - name: Push Docker image
+        run: |
+          docker push krishum77/geth-with-contracts:latest
 
       - name: Run the new image
         run: |
