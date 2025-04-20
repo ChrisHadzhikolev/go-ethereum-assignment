@@ -83,10 +83,11 @@ jobs:
           echo '---'
           docker exec devnet ls -a /root/.ethereum/devchain/geth/chaindata
           echo '---'
+          
+          sudo docker cp devnet:/root/.ethereum/devchain/geth/chaindata ./chaindata
+          sudo ls -R ./chaindata
+          sudo du -sh ./chaindata
           docker stop devnet
-          sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
-          ls -R ./chaindata
-          du -sh ./chaindata
           
       - name: Create new Docker image with deployed contracts
         run: |
