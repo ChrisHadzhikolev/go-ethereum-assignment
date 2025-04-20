@@ -19,7 +19,6 @@ jobs:
         run: |
           docker pull krishum77/get-etherium-assignment:latest
           docker run -d -p 8545:8545 \
-           -v ${{ github.workspace }}/chaindata:/root/.ethereum/devchain \
            --name devnet krishum77/get-etherium-assignment:latest \
            --dev \
            --http \
@@ -76,10 +75,11 @@ jobs:
         run: | 
          docker logs devnet
          
+         
       - name: Stop Geth Container and copy chain data
         run: |
           echo '---'
-          docker exec devnet ls -al /root/.ethereum/devchain/chaindata
+          docker exec devnet ls -a /root/.ethereum/
           echo '---'
           docker stop devnet
           sudo docker cp devnet:/root/.ethereum/devchain ./chaindata
