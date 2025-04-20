@@ -89,6 +89,7 @@ jobs:
           sudo du -sh ./chaindata
           mkdir -p gethdata/geth/chaindata
           sudo cp -r ./chaindata/* gethdata/geth/chaindata/
+          sudo chmod -R a+rX gethdata
           docker stop devnet
           
       - name: Create new Docker image with deployed contracts
