@@ -1,5 +1,5 @@
 FROM krishum77/get-etherium-assignment:latest
 
-COPY ./gethdata /root/.ethereum
+COPY ./gethdata /root/.ethereum/devchain/geth
 EXPOSE 8545
 ENTRYPOINT ["geth"]
