@@ -109,6 +109,10 @@ jobs:
            --http.corsdomain=* \
            --nodiscover
 
+      - name: Docker logs
+        run: | 
+         docker logs predeployed
+
       - name: Wait for Geth redeployed
         run: |
           echo "Waiting for Geth to start..."
