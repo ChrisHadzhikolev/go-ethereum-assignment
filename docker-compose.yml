@@ -14,8 +14,7 @@ services:
       - --http.addr
       - 0.0.0.0
       - --http.api
-      - eth,web3,net
-      - --allow-insecure-unlock
+      - eth,web3,net,debug
     volumes:
       - ./data:/app/data
     restart: unless-stopped
