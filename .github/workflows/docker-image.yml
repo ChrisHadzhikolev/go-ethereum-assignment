@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         
-      - name: Run Forked Repository Image
+      - name: Run Forked Repository Image in Devnet
         run: |
           docker pull krishum77/get-etherium-assignment:latest
           docker run -d -p 8545:8545 \
@@ -58,56 +58,34 @@ jobs:
           done
           echo "Geth is live"
 
-      - name: Show Geth logs
-        run: docker logs devnet
-
       - name: Compile contracts
         working-directory: hardhat
         run: npx hardhat compile
 
-      - name: Deploy Lock contract to devnet
+      - name: Deploy Lock Contract to Devnet with a Custom Script
         working-directory: hardhat
-        # run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet
-        # env:
-        #  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: false
-         # PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
         run: npx hardhat run scripts/deploy.ts --network devnet
-
-      - name: Show Geth logs
-        run: | 
-         docker logs devnet
          
-         
-      - name: Stop Geth Container and copy chain data
+      - name: Stop Geth Container and Copy Chain Data
         run: |
-          echo '---'
-          docker exec devnet ls -a /root/.ethereum/devchain/
-          echo '---'
-          
           sudo docker cp devnet:/root/.ethereum/devchain ./devchain
-          sudo ls -R ./devchain
-          sudo du -sh ./devchain
           mkdir -p gethdata
           sudo cp -r ./devchain/* gethdata/
           sudo chmod -R a+rX gethdata
           docker stop devnet
           
-      # - name: Create new Docker image with deployed contracts
-      #   run: |
-      #     cp Dockerfile.predeployedContracts Dockerfile
-      #     docker build -t krishum77/geth-with-contracts:latest .
+      - name: Create new Docker image with the Deployed Contract
+        run: |
+          cp Dockerfile.predeployedContracts Dockerfile
+          docker build -t krishum77/geth-with-contracts:latest .
 
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Push Docker image
-      #   run: |
-      #     docker push krishum77/geth-with-contracts:latest
-
-      - name: Run the new image
+      - name: Run the New Image with Predeployed Contract
         run: |
           docker run -d -p 8545:8545 --name predeployed krishum77/geth-with-contracts:latest \
            --datadir /root/.ethereum/devchain \
@@ -119,11 +97,7 @@ jobs:
            --http.corsdomain=* \
            --nodiscover
 
-      - name: Docker logs
-        run: | 
-         docker logs predeployed
-
-      - name: Wait for Geth redeployed
+      - name: Wait for Geth Redeployment
         run: |
           echo "Waiting for Geth to start..."
           timeout=180
@@ -141,25 +115,10 @@ jobs:
           done
           echo "Geth is live"
 
-      # - name: Deploy Lock contract to devnet
-      #   working-directory: hardhat
-      #   # run: npx hardhat ignition deploy ./ignition/modules/Lock.ts --network devnet
-      #   # env:
-      #   #  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: false
-      #    # PRIVATE_KEY: 4f3edf983ac636a65a842ce7c78d9aa706d3b113b37c936e9c37fda7f1f7c8c2
-      #   run: npx hardhat run scripts/deploy.ts --network devnet
-
-      - name: Docker logs 
-        run: | 
-         docker exec predeployed ls -a /root/.ethereum/devchain/geth
-         docker exec predeployed ls -a /root/.ethereum/devchain/keystore
-         docker logs predeployed
-         ADDRESS="0xbcA041dc4b441EB5E11222A46D7D534952DA4916"  
-         CODE=$(curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_getCode","params":["'"$ADDRESS"'", "latest"],"id":1}' \
-          -H "Content-Type: application/json" http://localhost:8545 | jq -r .result)
-         echo "Contract code: $CODE"
-         
-
-      # - name: Run tests
+      # - name: Run Hardhat Tests before Pushing the Image to Registry
       #   working-directory: hardhat 
       #   run: npx hardhat test --network devnet
+
+      - name: Push Docker image
+        run: |
+          docker push krishum77/geth-with-contracts:latest
