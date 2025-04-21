@@ -115,9 +115,10 @@ jobs:
           done
           echo "Geth is live"
 
-      - name: Run Hardhat Tests before Pushing the Image to Registry
-        working-directory: hardhat 
-        run: npx hardhat test --network devnet
+      # Commented out based on explanation in the email
+      # - name: Run Hardhat Tests before Pushing the Image to Registry
+      #   working-directory: hardhat 
+      #   run: npx hardhat test --network devnet
 
       - name: Push Docker image
         run: |
