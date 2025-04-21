@@ -23,13 +23,18 @@
            - Setting up Node.js and installing hardhat dependencies (using lightweight npm ci instead of npm i)
            - Waiting for the docker container to be ready (added timeout of 180 seconds to make sure it doesn't get stuck in endless loop)
            - Compiling the default contract from the hardhat sample project
-           - Deploying the default contract using deploy.ts script
-           - Stopping the docker container and copying any generated data
+           - Deploying the default contract using custom deploy.ts script with ethers 6
+           - Stopping the docker container, copying any generated data, giving user permissions to access the copied data (so docker can access it)
+           - 
         5. builds a new docker image, which allows to run an instance of the devnet with the contracts already deployed and uploads it to the same registry with a suitable different tag
            - Building and Pushing a new docker image with Dockerfile (Dockerfile.predeployedContracts) located in the root directory passing the data from the previous step (krishum77/geth-with-contracts)
+           - Injecting the data from the forked geth image container
 
 4. Add a step to the pipeline which runs the hardhat tests from the sample project against the image with predeployed contracts
+   - Running the new docker image before it is pushed
+   - Waiting for the container to run and be ready
    - Running the default tests from the hardhat sample project before deploying the contract step.
+   - Pushing the docker image
 6. Create a Terraform script that quickly creates a k8s cluster in the cloud and deploys an instance of the built image to it.
    - Deploying to GKE
    - versions.tf - kubernetes and google providers
